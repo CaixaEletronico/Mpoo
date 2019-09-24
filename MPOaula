@@ -1,0 +1,163 @@
+package banco;
+
+public class AppBanco {
+	
+	public static boolean transferir(Conta contaOrigem, Conta contaDestino, double valor){
+		if(contaOrigem != null && contaDestino != null){
+			if(contaOrigem instanceof Corrente)	//serve pra dizer que a conta origem � uma conta corrente
+				valor+=0.5;	//se a conta origem for corrente, � tirado do sacar 50 centavos
+			
+			if(contaOrigem.sacar(valor)){
+				valor-=0.5;	//se a conta origem for corrente, � tirado do sacar 50 centavos
+				if(contaDestino instanceof Poupan�a){
+					if(((Poupan�a) contaDestino).getDigitoVerificador()==1)///uso do cast (Poupan�a)
+							valor+=0.1;
+				}	
+			}
+			contaDestino.depositar(valor);
+			return true;
+		}
+		return false;
+	}
+	
+	public static void main(String[] args) {
+		Corrente corrente = new Corrente("Renato");
+		System.out.println(corrente.toString());
+		corrente.depositar(1000.1);
+		System.out.println(corrente.toString());
+		
+		Poupan�a poupan�a = new Poupan�a("Maria");
+		System.out.println(poupan�a.toString());
+		
+		transferir(corrente, poupan�a, 800.0);
+		System.out.println(corrente.toString());
+		System.out.println(poupan�a.toString());
+		
+		transferir(poupan�a, corrente, 200.0);
+		System.out.println(corrente.toString());
+		System.out.println(poupan�a.toString());
+		
+		Conta c = new Poupan�a("Eu");
+		if (c instanceof Conta)
+			System.out.println("� conta");
+		if (c instanceof Corrente)
+			System.out.println("� corrente");
+		if (c instanceof Poupan�a)
+			System.out.println("� poupan�a");
+		
+		
+	}
+
+}
+
+package banco;
+
+public class Cliente {
+	private String NomeCliente;
+	private String cpf;
+	
+	public Cliente(String nomeCliente, String cpf) {
+		super();
+		NomeCliente = nomeCliente;
+		this.cpf = cpf;
+	}
+	public String getNomeCliente() {
+		return NomeCliente;
+	}
+	public void setNomeCliente(String nomeCliente) {
+		NomeCliente = nomeCliente;
+	}
+	public String getCpf() {
+		return cpf;
+	}
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+
+}
+
+package banco;
+
+public abstract class Conta {
+	
+	private String nomeCliente;
+	private double saldo;
+	
+	public Conta(String nomeCliente) {
+		super();
+		this.nomeCliente = nomeCliente;
+	}
+	
+	public boolean depositar(double valor){
+		if (valor>0){
+		this.saldo+=valor;
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean sacar(double valor){
+		if (valor <= saldo){
+			this.saldo-=valor;
+			return true;
+		}
+		return false;
+	}
+
+	public String getNomeCliente() {
+		return nomeCliente;
+	}
+	public void setNomeCliente(String nomeCliente) {
+		this.nomeCliente = nomeCliente;
+	}
+	public double getSaldo() {
+		return saldo;
+	}
+
+
+	public String toString() {
+		return "Conta [nomeCliente=" + nomeCliente + ", saldo=" + saldo + "]";
+	}
+	
+	
+	
+	
+}
+
+package banco;
+
+public class Corrente extends Conta{
+
+	public Corrente(String nomeCliente) {
+		super(nomeCliente);
+		
+		
+	}
+
+}
+
+package banco;
+public class Poupan�a extends Conta {
+	private final int DigitoVerificador = 1; //assumindo que o digito nao muda, ai n surge set pois n pode modificar
+	
+	public Poupan�a(String nomeCliente) {
+		super(nomeCliente);
+	}
+	
+	//public Poupan�a(String nomeCliente, double saldo, int DigitoVerificador) { caso ele pudesse ser modificado
+		//super(nomeCliente);
+	//}
+
+	public int getDigitoVerificador() {
+		return DigitoVerificador;
+	}
+
+	@Override
+	public String toString() {
+		return "Poupan�a [DigitoVerificador=" + DigitoVerificador + super.toString() +"]";
+	}
+	
+	
+
+}
