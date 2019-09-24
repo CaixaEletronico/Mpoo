@@ -1,0 +1,38 @@
+package App;
+
+import view.Tela;
+
+public class App {
+	public static void main(String[] args) {
+		Tela tela = new Tela();
+	}
+
+}
+
+package view;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class Tela extends JFrame {
+	JButton botao;
+	public Tela(){
+		super("Renato � muito gostoso");
+		setSize(600,600);//tamanho da tela
+		setResizable(false);//para nao poder redimensionar
+		//jframe.isUndecorated(true); pra tirar borda
+		setLocationRelativeTo(null);//null para aparecer no centro da tela
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//para criar o x para fechar a tela
+		
+		setLayout(new FlowLayout());//faz com q o butao se ajuste de acordo com a tela
+		botao =  new JButton("Sair");
+		add(botao);
+	
+		
+			
+		setVisible(true);//para o jframe aparecer
+
+}
+}
